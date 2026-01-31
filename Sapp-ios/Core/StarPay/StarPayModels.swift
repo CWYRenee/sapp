@@ -3,19 +3,16 @@ import Foundation
 // MARK: - Card Types
 
 enum CardType: String, Codable, CaseIterable {
-    case visa = "visa"
     case mastercard = "mastercard"
 
     var displayName: String {
         switch self {
-        case .visa: return "Visa"
         case .mastercard: return "Mastercard"
         }
     }
 
     var iconName: String {
         switch self {
-        case .visa: return "creditcard.fill"
         case .mastercard: return "creditcard.fill"
         }
     }

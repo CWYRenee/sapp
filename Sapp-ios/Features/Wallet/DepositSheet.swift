@@ -209,7 +209,7 @@ struct DepositSheet: View {
                     .keyboardType(.decimalPad)
                     .foregroundColor(SappColors.textPrimary)
                     .onChange(of: viewModel.depositAmount) { _, _ in
-                        viewModel.updateSwapNeededState()
+                        viewModel.onDepositAmountChanged()
                     }
 
                 if let pool = viewModel.selectedPoolForDeposit {
@@ -288,7 +288,7 @@ struct DepositSheet: View {
                         .foregroundColor(SappColors.textPrimary)
                 }
 
-                // Swap quote or get quote button
+                // Swap quote (auto-fetched) or loading indicator
                 if let quote = viewModel.swapQuote {
                     swapQuoteSummary(quote: quote)
                 } else if viewModel.isGettingSwapQuote {
@@ -299,20 +299,6 @@ struct DepositSheet: View {
                             .font(SappTypography.caption)
                             .foregroundColor(SappColors.textSecondary)
                     }
-                    .padding(.top, SappSpacing.xs)
-                } else {
-                    Button {
-                        Task {
-                            await viewModel.getSwapQuote()
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "bolt.fill")
-                            Text("Get Swap Quote")
-                        }
-                        .font(SappTypography.labelSmall)
-                    }
-                    .buttonStyle(SappSecondaryButtonStyle())
                     .padding(.top, SappSpacing.xs)
                 }
             }

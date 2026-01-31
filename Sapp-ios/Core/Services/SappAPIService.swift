@@ -283,39 +283,52 @@ final class SappAPIService: ObservableObject {
     
     /// Look up a user by handle
     func lookupUser(handle: String) async throws -> SappUserInfo {
+        print("[SappAPIService] lookupUser called for handle: \(handle), baseURL: \(baseURL)")
         let endpoint = "/api/sapp/users/lookup"
         guard var urlComponents = URLComponents(string: baseURL + endpoint) else {
+            print("[SappAPIService] lookupUser FAILED: invalid URL components for \(baseURL + endpoint)")
             throw SappAPIError.invalidURL
         }
         urlComponents.queryItems = [URLQueryItem(name: "handle", value: handle)]
-        
+
         guard let url = urlComponents.url else {
+            print("[SappAPIService] lookupUser FAILED: could not construct URL")
             throw SappAPIError.invalidURL
         }
-        
+
+        print("[SappAPIService] lookupUser requesting: \(url.absoluteString)")
+
         do {
             let (data, response) = try await session.data(from: url)
-            
+
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw SappAPIError.unknown
             }
-            
+
+            print("[SappAPIService] lookupUser response status: \(httpResponse.statusCode)")
+            if let responseStr = String(data: data, encoding: .utf8) {
+                print("[SappAPIService] lookupUser response body: \(responseStr)")
+            }
+
             if httpResponse.statusCode == 404 {
                 throw SappAPIError.userNotFound
             }
-            
+
             let decoded = try JSONDecoder().decode(APIResponse<SappUserInfo>.self, from: data)
-            
+
             if decoded.success, let user = decoded.user {
                 return user
             } else {
                 throw SappAPIError.serverError(decoded.message ?? "Lookup failed")
             }
         } catch let error as SappAPIError {
+            print("[SappAPIService] lookupUser SappAPIError: \(error)")
             throw error
         } catch let error as DecodingError {
+            print("[SappAPIService] lookupUser DecodingError: \(error)")
             throw SappAPIError.decodingError(error)
         } catch {
+            print("[SappAPIService] lookupUser NetworkError: \(error)")
             throw SappAPIError.networkError(error)
         }
     }

@@ -8,6 +8,7 @@ struct WalletView: View {
     @State private var showReceive = false
     @State private var showSwap = false
     @State private var showEarn = false
+    @State private var showCard = false
 
     var body: some View {
         NavigationStack {
@@ -49,6 +50,9 @@ struct WalletView: View {
                     },
                     FABAction(icon: "chart.line.uptrend.xyaxis", label: "Earn", color: SappColors.warning) {
                         showEarn = true
+                    },
+                    FABAction(icon: "creditcard.fill", label: "Card", color: SappColors.accent) {
+                        showCard = true
                     }
                 ]
             )
@@ -63,6 +67,9 @@ struct WalletView: View {
             }
             .sheet(isPresented: $showEarn) {
                 EarnView()
+            }
+            .sheet(isPresented: $showCard) {
+                StarpayCardsView()
             }
             .task {
                 await viewModel.loadWallet()
@@ -168,16 +175,6 @@ struct WalletView: View {
 
             ForEach(viewModel.tokenBalances) { token in
                 HStack {
-                    // Token icon
-                    Image(systemName: token.iconName)
-                        .font(.system(size: 16))
-                        .foregroundColor(SappColors.textSecondary)
-                        .frame(width: 32, height: 32)
-                        .background(
-                            Circle()
-                                .fill(SappColors.accentLight)
-                        )
-
                     // Token name
                     Text(token.symbol)
                         .font(SappTypography.labelMedium)

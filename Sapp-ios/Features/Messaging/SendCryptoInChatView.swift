@@ -449,18 +449,25 @@ struct SendCryptoInChatView: View {
     }
 
     private func loadRecipientAddress() async {
+        print("[SendCryptoInChatView] loadRecipientAddress() called for handle: \(recipientHandle)")
         isLoadingRecipient = true
+        errorMessage = nil
 
         do {
+            print("[SendCryptoInChatView] About to call lookupUser...")
             let user = try await SappAPIService.shared.lookupUser(handle: recipientHandle)
+            print("[SendCryptoInChatView] lookupUser returned: \(user)")
             await MainActor.run {
                 recipientSolanaAddress = user.solanaAddress
                 isLoadingRecipient = false
                 if user.solanaAddress == nil {
                     errorMessage = "User @\(recipientHandle) has no wallet connected"
+                } else {
+                    errorMessage = nil  // Clear any error from cancelled requests
                 }
             }
         } catch {
+            print("[SendCryptoInChatView] Lookup failed for @\(recipientHandle): \(error)")
             await MainActor.run {
                 isLoadingRecipient = false
                 errorMessage = "Could not find @\(recipientHandle)"

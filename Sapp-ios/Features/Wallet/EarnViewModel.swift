@@ -69,6 +69,7 @@ final class EarnViewModel: ObservableObject {
     private let solanaService = SolanaWalletService()
     private var cancellables = Set<AnyCancellable>()
     private var walletAddress: String?
+    private var quoteTask: Task<Void, Never>?
 
     // MARK: - Computed Properties
 
@@ -371,6 +372,33 @@ final class EarnViewModel: ObservableObject {
         }
     }
 
+    /// Called when deposit amount changes - triggers debounced quote fetch
+    func onDepositAmountChanged() {
+        // Update swap needed state first
+        updateSwapNeededState()
+
+        // Cancel any pending quote task
+        quoteTask?.cancel()
+        quoteTask = nil
+        swapQuote = nil
+
+        // Only auto-fetch quote if swap is needed and we have a valid amount
+        guard needsSwap, depositAmountDouble > 0 else { return }
+
+        // Debounce: wait 500ms before fetching quote
+        quoteTask = Task {
+            do {
+                try await Task.sleep(nanoseconds: 500_000_000) // 500ms debounce
+
+                guard !Task.isCancelled else { return }
+
+                await getSwapQuote()
+            } catch {
+                // Task cancelled or sleep interrupted, ignore
+            }
+        }
+    }
+
     // MARK: - Auto-Swap Flow
 
     func getSwapQuote() async {
@@ -417,10 +445,22 @@ final class EarnViewModel: ObservableObject {
                 senderAddress: walletAddress
             )
 
+            // Check if task was cancelled while waiting for quote
+            guard !Task.isCancelled else {
+                isGettingSwapQuote = false
+                return
+            }
+
             swapQuote = quote
             print("[EarnViewModel] Swap quote received: \(quote.estimatedOutput) USDC for \(swapAmount) SOL")
+        } catch is CancellationError {
+            // Task was cancelled, don't show error
+            print("[EarnViewModel] Swap quote request cancelled")
         } catch {
-            errorMessage = "Failed to get swap quote: \(error.localizedDescription)"
+            // Only show error if not cancelled
+            if !Task.isCancelled {
+                errorMessage = "Failed to get swap quote: \(error.localizedDescription)"
+            }
             print("[EarnViewModel] Swap quote error: \(error)")
         }
 

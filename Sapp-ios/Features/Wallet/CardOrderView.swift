@@ -693,7 +693,7 @@ enum CardOrderStep {
 final class CardOrderViewModel: ObservableObject {
     // Input state
     @Published var amount: String = ""
-    @Published var cardType: CardType = .visa
+    @Published var cardType: CardType = .mastercard
     @Published var email: String = ""
 
     // Order state
@@ -722,6 +722,7 @@ final class CardOrderViewModel: ObservableObject {
     // Services
     private let starpayService = StarPayService.shared
     private let solanaService = SolanaWalletService()
+    private let cardStorage = StarpayCardStorage.shared
     private var pollingTask: Task<Void, Never>?
     private var pricingTask: Task<Void, Never>?
 
@@ -909,7 +910,7 @@ final class CardOrderViewModel: ObservableObject {
     func reset() {
         amount = ""
         email = ""
-        cardType = .visa
+        cardType = .mastercard
         currentStep = .input
         orderResponse = nil
         cardDetails = nil
@@ -941,6 +942,15 @@ final class CardOrderViewModel: ObservableObject {
             stopPolling()
             cardDetails = status.card
             currentStep = .completed
+            // Save card to local storage
+            if let card = status.card, let cardValue = orderResponse?.pricing.cardValue {
+                cardStorage.saveCard(
+                    cardDetails: card,
+                    cardType: cardType,
+                    email: email,
+                    cardValue: cardValue
+                )
+            }
         case .failed:
             stopPolling()
             failureReason = status.failureReason ?? "Card issuance failed."

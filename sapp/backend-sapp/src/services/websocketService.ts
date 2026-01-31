@@ -194,6 +194,7 @@ export function createWebSocketServer(httpServer: HTTPServer): SocketIOServer {
         if (pendingMsgs.length > 0) {
           console.log(`[WS] Delivering ${pendingMsgs.length} queued messages to @${normalizedHandle}`);
 
+          // First, emit all messages to the client (fast, non-blocking)
           for (const msg of pendingMsgs) {
             io.to(socket.id).emit('message:received', {
               id: msg.messageId,
@@ -203,12 +204,19 @@ export function createWebSocketServer(httpServer: HTTPServer): SocketIOServer {
               timestamp: msg.createdAt.toISOString(),
               replyTo: msg.replyTo,
             });
-
-            // Mark as delivered
-            msg.status = 'delivered';
-            msg.deliveredAt = new Date();
-            await msg.save();
           }
+
+          // Then, bulk update all as delivered in ONE database operation
+          const messageIds = pendingMsgs.map(msg => msg._id);
+          await Message.updateMany(
+            { _id: { $in: messageIds } },
+            {
+              $set: {
+                status: 'delivered',
+                deliveredAt: new Date()
+              }
+            }
+          );
 
           console.log(`[WS] All queued messages delivered to @${normalizedHandle}`);
         }

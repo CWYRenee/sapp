@@ -11,6 +11,7 @@
 		18AA2466207278ECE6C5C4D6 /* SolanaWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA7D297285D2D2F5A525E09 /* SolanaWalletService.swift */; };
 		1C02807D99B7480D19D0AAC4 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD3EADDCD825F6AC6DA2242 /* NewChatView.swift */; };
 		292D3EA00EBA2A7FCD83A0B7 /* PaymentFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5823A4F148D3965E2AEBE70 /* PaymentFlowCoordinator.swift */; };
+		2A3C2D4E17A995F9BA071B55 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0789052981CF5B478E99CEAB /* CardDetailView.swift */; };
 		315F4599EAFAB656D0A8FCEB /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE04578F4702934235555E4E /* WalletView.swift */; };
 		320866D1D5258F1E44E036D0 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01E3C37E5B0BB665F874AAF3 /* Config.plist */; };
 		35DD5ADD531AEBD1FBE0210E /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D14BE0F5BD83BD122195D05 /* ChatView.swift */; };
@@ -21,6 +22,7 @@
 		6434E002114677FF73300872 /* SappTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C647E6C13087BA1D9BBF9E2 /* SappTextField.swift */; };
 		8C5B609947D794A51C3A7583 /* ConversationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBFE842556502107015CEC5 /* ConversationsView.swift */; };
 		96B0C10D72F29D0533BBADF3 /* SwapAndPayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33815850A983161226F91C /* SwapAndPayService.swift */; };
+		9985329C10B4D272A6DB022C /* StarpayCardStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57700E429B5EA373DB8AB5E /* StarpayCardStorage.swift */; };
 		A2C220E46E804FEC4DF9CC7A /* AutoSwapPayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BBCE419FD6959FF1DD87FC /* AutoSwapPayView.swift */; };
 		AA0001112F17A00000000001 /* SappAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001102F17A00000000001 /* SappAPIService.swift */; };
 		AA0001132F17A00000000002 /* HandleSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001122F17A00000000002 /* HandleSetupView.swift */; };
@@ -116,6 +118,7 @@
 		E8620C24595CCEE7588E24E2 /* SappErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BF753256520F4A50E64309 /* SappErrors.swift */; };
 		E8620C24595CCEE7588E24E3 /* WalletModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BF753256520F4A50E6430A /* WalletModels.swift */; };
 		E8620C24595CCEE7588E24E4 /* WalletAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BF753256520F4A50E6430B /* WalletAPIService.swift */; };
+		E97C778B51D8242D06B27D0E /* StarpayCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA04D6D649B7CCBD760F971B /* StarpayCardsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -134,6 +137,7 @@
 
 /* Begin PBXFileReference section */
 		01E3C37E5B0BB665F874AAF3 /* Config.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
+		0789052981CF5B478E99CEAB /* CardDetailView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Features/Wallet/CardDetailView.swift; sourceTree = SOURCE_ROOT; };
 		3C33815850A983161226F91C /* SwapAndPayService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwapAndPayService.swift; sourceTree = "<group>"; };
 		4D14BE0F5BD83BD122195D05 /* ChatView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatView.swift; path = Features/Messaging/ChatView.swift; sourceTree = "<group>"; };
 		4FA7D297285D2D2F5A525E09 /* SolanaWalletService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SolanaWalletService.swift; path = Core/Solana/SolanaWalletService.swift; sourceTree = "<group>"; };
@@ -155,8 +159,10 @@
 		AFBFE842556502107015CEC5 /* ConversationsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConversationsView.swift; path = Features/Messaging/ConversationsView.swift; sourceTree = "<group>"; };
 		C506F77C4457951D306302A6 /* BareKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BareKitManager.swift; path = Core/Messaging/BareKitManager.swift; sourceTree = "<group>"; };
 		C5823A4F148D3965E2AEBE70 /* PaymentFlowCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PaymentFlowCoordinator.swift; path = Wallet/PaymentFlowCoordinator.swift; sourceTree = "<group>"; };
+		CA04D6D649B7CCBD760F971B /* StarpayCardsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Features/Wallet/StarpayCardsView.swift; sourceTree = SOURCE_ROOT; };
 		D46A2CDEA331F36185AE895B /* Config.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		D4FC47E24006030864597E73 /* MessagingService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MessagingService.swift; path = Core/Messaging/MessagingService.swift; sourceTree = "<group>"; };
+		D57700E429B5EA373DB8AB5E /* StarpayCardStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Core/StarPay/StarpayCardStorage.swift; sourceTree = SOURCE_ROOT; };
 		DE04578F4702934235555E4E /* WalletView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WalletView.swift; path = Features/Wallet/WalletView.swift; sourceTree = "<group>"; };
 		E301F1F92ED5E983000F07D7 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		E301F2002ED5E983000F07D7 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -361,6 +367,8 @@
 				E32EB5CC2F24C4F0002AC726 /* WalletView.swift */,
 				C5823A4F148D3965E2AEBE70 /* PaymentFlowCoordinator.swift */,
 				A8BBCE419FD6959FF1DD87FC /* AutoSwapPayView.swift */,
+				CA04D6D649B7CCBD760F971B /* StarpayCardsView.swift */,
+				0789052981CF5B478E99CEAB /* CardDetailView.swift */,
 			);
 			name = Wallet;
 			sourceTree = "<group>";
@@ -586,6 +594,7 @@
 			children = (
 				E32EB5EB2F261F7A002AC726 /* StarPayModels.swift */,
 				E32EB5EC2F261F7A002AC726 /* StarPayService.swift */,
+				D57700E429B5EA373DB8AB5E /* StarpayCardStorage.swift */,
 			);
 			path = StarPay;
 			sourceTree = "<group>";
@@ -858,6 +867,9 @@
 				96B0C10D72F29D0533BBADF3 /* SwapAndPayService.swift in Sources */,
 				292D3EA00EBA2A7FCD83A0B7 /* PaymentFlowCoordinator.swift in Sources */,
 				A2C220E46E804FEC4DF9CC7A /* AutoSwapPayView.swift in Sources */,
+				9985329C10B4D272A6DB022C /* StarpayCardStorage.swift in Sources */,
+				E97C778B51D8242D06B27D0E /* StarpayCardsView.swift in Sources */,
+				2A3C2D4E17A995F9BA071B55 /* CardDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
