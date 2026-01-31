@@ -12,6 +12,7 @@ import type {
   SwapResult,
   PaymentResult,
 } from '../types/swapAndPay.types.js';
+import type { SupportedChain } from '../types/silentSwap.types.js';
 
 import { shadowWireService } from './shadowWireService.js';
 import { silentSwapService } from './silentSwapService.js';
@@ -138,9 +139,9 @@ class SwapAndPayService {
         entropy: request.entropy,
         fromToken: TOKEN_MINTS[request.fromToken] || request.fromToken,
         toToken: TOKEN_MINTS[request.paymentToken] || request.paymentToken,
-        amount: request.swapAmount,
-        fromChain: request.fromChain,
-        toChain: 'solana',
+        amount: String(request.swapAmount),
+        fromChain: request.fromChain as SupportedChain,
+        toChain: 'solana' as SupportedChain,
         recipientAddress: request.senderWallet, // Swap to self first
         senderAddress: request.senderWallet,
       };
@@ -154,6 +155,7 @@ class SwapAndPayService {
         entropy: request.entropy,
         signedAuthorizations: [], // Will be populated by the client
         orderSignature: '', // Will be populated by the client
+        eip712Domain: null, // Will be populated by the client
         rawQuote: quote.rawQuote,
       };
 
@@ -283,30 +285,62 @@ class SwapAndPayService {
 
   /**
    * Estimate amount needed to swap for target amount
+   * Uses the quote API for accurate real-time pricing
    */
   private async estimateSwapAmount(
     fromToken: string,
     toToken: string,
     toAmount: number
   ): Promise<number> {
-    // Simple estimation based on common token prices
-    // In production, this should call the quote API
+    try {
+      // Get actual quote from SilentSwap for accurate pricing
+      const fromMint = TOKEN_MINTS[fromToken] || fromToken;
+      const toMint = TOKEN_MINTS[toToken] || toToken;
 
-    switch (`${fromToken}-${toToken}`) {
-      case 'SOL-USDC':
-      case 'SOL-USDT':
-        // Assume ~$150 per SOL (should be fetched from price API)
-        return (toAmount / 150.0) * 1.02; // Add 2% buffer for slippage
-      case 'USDC-SOL':
-      case 'USDT-SOL':
-        return toAmount * 150.0 * 1.02;
-      case 'USDC-USDT':
-      case 'USDT-USDC':
-        return toAmount * 1.001; // Stablecoin swap, minimal slippage
-      default:
-        // For unknown pairs, estimate based on USDC
-        return toAmount * 1.1; // 10% buffer
+      // Use a test amount to get exchange rate, then scale
+      const testAmount = 1.0;
+      const quoteRequest = {
+        evmAddress: '0x0000000000000000000000000000000000000000', // Placeholder for quote
+        entropy: 'estimate',
+        fromToken: fromMint,
+        toToken: toMint,
+        amount: String(testAmount),
+        fromChain: 'solana' as SupportedChain,
+        toChain: 'solana' as SupportedChain,
+        recipientAddress: 'So11111111111111111111111111111111111111112', // Placeholder
+        senderAddress: 'So11111111111111111111111111111111111111112',
+      };
+
+      const quote = await silentSwapService.getQuote(quoteRequest);
+
+      if (quote.estimatedOutput && parseFloat(quote.estimatedOutput) > 0) {
+        const rate = parseFloat(quote.estimatedOutput) / testAmount;
+        const estimatedInput = (toAmount / rate) * 1.02; // Add 2% buffer for slippage
+        console.log(`[SwapAndPayService] Dynamic estimate: ${estimatedInput} ${fromToken} for ${toAmount} ${toToken} (rate: ${rate})`);
+        return estimatedInput;
+      }
+    } catch (error) {
+      console.log(`[SwapAndPayService] Quote API unavailable, using fallback: ${error}`);
     }
+
+    // Fallback estimation when quote API is unavailable
+    return this.fallbackEstimate(fromToken, toToken, toAmount);
+  }
+
+  /**
+   * Fallback estimation when quote API is unavailable
+   */
+  private fallbackEstimate(fromToken: string, toToken: string, toAmount: number): number {
+    // Stablecoin swaps have minimal slippage
+    if ((fromToken === 'USDC' || fromToken === 'USDT') &&
+        (toToken === 'USDC' || toToken === 'USDT')) {
+      return toAmount * 1.001;
+    }
+
+    // For other pairs, use a conservative 15% buffer
+    // This is only a fallback - the quote API should be used for accuracy
+    console.log(`[SwapAndPayService] Using fallback estimate for ${fromToken} -> ${toToken}`);
+    return toAmount * 1.15;
   }
 
   /**

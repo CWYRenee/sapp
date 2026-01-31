@@ -456,11 +456,10 @@ struct AutoSwapPayView: View {
                 .foregroundColor(SappColors.textSecondary)
                 .multilineTextAlignment(.center)
 
-            if let sig = result.paymentSignature.prefix(20) {
-                Text("Signature: \(sig)...")
-                    .font(SappTypography.monoSmall)
-                    .foregroundColor(SappColors.textTertiary)
-            }
+            let sig = result.paymentSignature.prefix(20)
+            Text("Signature: \(sig)...")
+                .font(SappTypography.monoSmall)
+                .foregroundColor(SappColors.textTertiary)
         }
         .padding(.vertical, 30)
     }

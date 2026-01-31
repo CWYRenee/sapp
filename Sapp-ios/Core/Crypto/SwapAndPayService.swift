@@ -343,25 +343,57 @@ final class SwapAndPayService: ObservableObject {
     }
 
     private func estimateSwapAmount(fromToken: String, toToken: String, toAmount: Double) async -> Double {
-        // Simple estimation based on common token prices
-        // In production, this should call the quote API
+        // Try to get actual quote from swap service for accurate pricing
+        do {
+            guard let solanaAddress = PrivyAuthService.shared.solanaWalletAddress else {
+                return fallbackEstimate(fromToken: fromToken, toToken: toToken, toAmount: toAmount)
+            }
 
-        // For now, use rough estimates
-        switch (fromToken, toToken) {
-        case ("SOL", "USDC"), ("SOL", "USDT"):
-            // Assume ~$150 per SOL (this should be fetched from price API)
-            return (toAmount / 150.0) * 1.02 // Add 2% buffer for slippage
-        case ("USDC", "SOL"), ("USDT", "SOL"):
-            return toAmount * 150.0 * 1.02
-        case ("USDC", "USDT"), ("USDT", "USDC"):
-            return toAmount * 1.001 // Stablecoin swap, minimal slippage
-        case ("SOL", _), (_, "SOL"):
-            // Generic SOL swap
-            return toAmount / 100.0 * 1.05 // Very rough estimate
-        default:
-            // For unknown pairs, estimate based on USDC
-            return toAmount * 1.1 // 10% buffer
+            // Load supported tokens if needed
+            if silentSwapService.supportedTokens.isEmpty {
+                try await silentSwapService.loadSupportedTokens()
+            }
+
+            guard let fromSwapToken = findToken(symbol: fromToken, chain: .solana),
+                  let toSwapToken = findToken(symbol: toToken, chain: .solana) else {
+                return fallbackEstimate(fromToken: fromToken, toToken: toToken, toAmount: toAmount)
+            }
+
+            // Use a small test amount to get the exchange rate, then scale
+            let testAmount = 1.0
+            let quote = try await silentSwapService.getQuote(
+                fromToken: fromSwapToken,
+                toToken: toSwapToken,
+                amount: testAmount,
+                recipientAddress: solanaAddress,
+                senderAddress: solanaAddress
+            )
+
+            // Calculate exchange rate from quote
+            if let outputAmount = Double(quote.estimatedOutput), outputAmount > 0 {
+                let rate = outputAmount / testAmount
+                let estimatedInput = (toAmount / rate) * 1.02 // Add 2% buffer for slippage
+                print("[SwapAndPayService] Dynamic estimate: \(estimatedInput) \(fromToken) for \(toAmount) \(toToken) (rate: \(rate))")
+                return estimatedInput
+            }
+        } catch {
+            print("[SwapAndPayService] Failed to get dynamic quote, using fallback: \(error.localizedDescription)")
         }
+
+        return fallbackEstimate(fromToken: fromToken, toToken: toToken, toAmount: toAmount)
+    }
+
+    /// Fallback estimation when quote API is unavailable
+    private func fallbackEstimate(fromToken: String, toToken: String, toAmount: Double) -> Double {
+        // Stablecoin swaps have minimal slippage
+        if (fromToken == "USDC" || fromToken == "USDT") && (toToken == "USDC" || toToken == "USDT") {
+            return toAmount * 1.001
+        }
+
+        // For other pairs, use a conservative 15% buffer
+        // This is only a fallback - the quote API should be used for accuracy
+        print("[SwapAndPayService] Using fallback estimate for \(fromToken) -> \(toToken)")
+        return toAmount * 1.15
     }
 
     private func findToken(symbol: String, chain: BlockchainType) -> SilentSwapToken? {
@@ -374,21 +406,18 @@ final class SwapAndPayService: ObservableObject {
             let status = try await silentSwapService.getSwapStatus(orderId: orderId)
 
             switch status.status {
-            case "completed":
+            case .completed:
                 print("[SwapAndPayService] Swap completed on attempt \(attempt)")
                 return
-            case "failed":
+            case .failed:
                 throw AutoSwapPayError.swapExecutionFailed(status.error ?? "Swap failed")
-            case "pending", "processing":
+            case .pending, .processing:
                 // Update progress
                 let progress = 0.6 + (Double(attempt) / Double(maxAttempts)) * 0.2
                 state = .executingSwap(progress: progress, message: "Waiting for confirmation...")
 
                 // Wait before next check
                 try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-            default:
-                // Unknown status, wait and retry
-                try await Task.sleep(nanoseconds: 2_000_000_000)
             }
         }
 

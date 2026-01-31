@@ -168,12 +168,11 @@ struct PaymentFlowCoordinator: View {
         conversation: Conversation(
             id: "dm_alice_bob",
             participants: [
-                Conversation.Participant(handle: "alice", displayName: "Alice", avatarURL: nil)
+                ChatParticipant(id: "alice")
             ],
+            createdAt: Date(),
             lastMessage: nil,
             unreadCount: 0,
-            updatedAt: Date(),
-            createdAt: Date(),
             isGroup: false,
             groupName: nil
         ),

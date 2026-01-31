@@ -10,14 +10,18 @@
 		0A8C5960EBC46A2ADAA75E66 /* ChatModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB420F0204C20473C2A037A /* ChatModels.swift */; };
 		18AA2466207278ECE6C5C4D6 /* SolanaWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA7D297285D2D2F5A525E09 /* SolanaWalletService.swift */; };
 		1C02807D99B7480D19D0AAC4 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD3EADDCD825F6AC6DA2242 /* NewChatView.swift */; };
+		292D3EA00EBA2A7FCD83A0B7 /* PaymentFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5823A4F148D3965E2AEBE70 /* PaymentFlowCoordinator.swift */; };
 		315F4599EAFAB656D0A8FCEB /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE04578F4702934235555E4E /* WalletView.swift */; };
 		320866D1D5258F1E44E036D0 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01E3C37E5B0BB665F874AAF3 /* Config.plist */; };
 		35DD5ADD531AEBD1FBE0210E /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D14BE0F5BD83BD122195D05 /* ChatView.swift */; };
 		3AA5EAB800509993DA50D795 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9778FCC0A8225E9236AD8592 /* OnboardingView.swift */; };
 		40B6C15CF38CD9E560DA2559 /* SappBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A363CF5DA4A3C1AAAF052565 /* SappBottomBar.swift */; };
 		4E6B4331220B57703CDDB01C /* SappButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBC8E0427E4C24FA37293AD /* SappButton.swift */; };
+		542049CE63A983D0D9040459 /* SwapAndPayModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C7C5CDC83B90F3076BC8A1 /* SwapAndPayModels.swift */; };
 		6434E002114677FF73300872 /* SappTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C647E6C13087BA1D9BBF9E2 /* SappTextField.swift */; };
 		8C5B609947D794A51C3A7583 /* ConversationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBFE842556502107015CEC5 /* ConversationsView.swift */; };
+		96B0C10D72F29D0533BBADF3 /* SwapAndPayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C33815850A983161226F91C /* SwapAndPayService.swift */; };
+		A2C220E46E804FEC4DF9CC7A /* AutoSwapPayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BBCE419FD6959FF1DD87FC /* AutoSwapPayView.swift */; };
 		AA0001112F17A00000000001 /* SappAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001102F17A00000000001 /* SappAPIService.swift */; };
 		AA0001132F17A00000000002 /* HandleSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001122F17A00000000002 /* HandleSetupView.swift */; };
 		B2C95E81033D827717590D5A /* MessagingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FC47E24006030864597E73 /* MessagingService.swift */; };
@@ -130,6 +134,7 @@
 
 /* Begin PBXFileReference section */
 		01E3C37E5B0BB665F874AAF3 /* Config.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
+		3C33815850A983161226F91C /* SwapAndPayService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwapAndPayService.swift; sourceTree = "<group>"; };
 		4D14BE0F5BD83BD122195D05 /* ChatView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatView.swift; path = Features/Messaging/ChatView.swift; sourceTree = "<group>"; };
 		4FA7D297285D2D2F5A525E09 /* SolanaWalletService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SolanaWalletService.swift; path = Core/Solana/SolanaWalletService.swift; sourceTree = "<group>"; };
 		7600FAD8F160E2ABC8A1DADB /* SolanaModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SolanaModels.swift; path = Core/Solana/SolanaModels.swift; sourceTree = "<group>"; };
@@ -142,11 +147,14 @@
 		A2BF753256520F4A50E6430A /* WalletModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WalletModels.swift; path = Core/Wallet/WalletModels.swift; sourceTree = "<group>"; };
 		A2BF753256520F4A50E6430B /* WalletAPIService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WalletAPIService.swift; path = Core/Wallet/WalletAPIService.swift; sourceTree = "<group>"; };
 		A363CF5DA4A3C1AAAF052565 /* SappBottomBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SappBottomBar.swift; sourceTree = "<group>"; };
+		A3C7C5CDC83B90F3076BC8A1 /* SwapAndPayModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwapAndPayModels.swift; sourceTree = "<group>"; };
+		A8BBCE419FD6959FF1DD87FC /* AutoSwapPayView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutoSwapPayView.swift; path = Wallet/AutoSwapPayView.swift; sourceTree = "<group>"; };
 		AA0001102F17A00000000001 /* SappAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SappAPIService.swift; sourceTree = "<group>"; };
 		AA0001122F17A00000000002 /* HandleSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleSetupView.swift; sourceTree = "<group>"; };
 		AFBC8E0427E4C24FA37293AD /* SappButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SappButton.swift; sourceTree = "<group>"; };
 		AFBFE842556502107015CEC5 /* ConversationsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConversationsView.swift; path = Features/Messaging/ConversationsView.swift; sourceTree = "<group>"; };
 		C506F77C4457951D306302A6 /* BareKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BareKitManager.swift; path = Core/Messaging/BareKitManager.swift; sourceTree = "<group>"; };
+		C5823A4F148D3965E2AEBE70 /* PaymentFlowCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PaymentFlowCoordinator.swift; path = Wallet/PaymentFlowCoordinator.swift; sourceTree = "<group>"; };
 		D46A2CDEA331F36185AE895B /* Config.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		D4FC47E24006030864597E73 /* MessagingService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MessagingService.swift; path = Core/Messaging/MessagingService.swift; sourceTree = "<group>"; };
 		DE04578F4702934235555E4E /* WalletView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WalletView.swift; path = Features/Wallet/WalletView.swift; sourceTree = "<group>"; };
@@ -351,6 +359,8 @@
 				E32EB5D32F25D7EA002AC726 /* EarnView.swift */,
 				E32EB5CB2F24C4F0002AC726 /* SendCryptoView.swift */,
 				E32EB5CC2F24C4F0002AC726 /* WalletView.swift */,
+				C5823A4F148D3965E2AEBE70 /* PaymentFlowCoordinator.swift */,
+				A8BBCE419FD6959FF1DD87FC /* AutoSwapPayView.swift */,
 			);
 			name = Wallet;
 			sourceTree = "<group>";
@@ -565,6 +575,8 @@
 				E32EB5C32F24C15E002AC726 /* ShadowWireService.swift */,
 				E32EB5C42F24C15E002AC726 /* ShadowWireTokens.swift */,
 				E34428032F2BC0A700C0EB3C /* SETTINGS_VIEW_DEBUG_GUIDE.md */,
+				A3C7C5CDC83B90F3076BC8A1 /* SwapAndPayModels.swift */,
+				3C33815850A983161226F91C /* SwapAndPayService.swift */,
 			);
 			path = Crypto;
 			sourceTree = "<group>";
@@ -842,6 +854,10 @@
 				AA0001112F17A00000000001 /* SappAPIService.swift in Sources */,
 				AA0001132F17A00000000002 /* HandleSetupView.swift in Sources */,
 				E32EB5EA2F261D71002AC726 /* CardOrderView.swift in Sources */,
+				542049CE63A983D0D9040459 /* SwapAndPayModels.swift in Sources */,
+				96B0C10D72F29D0533BBADF3 /* SwapAndPayService.swift in Sources */,
+				292D3EA00EBA2A7FCD83A0B7 /* PaymentFlowCoordinator.swift in Sources */,
+				A2C220E46E804FEC4DF9CC7A /* AutoSwapPayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
